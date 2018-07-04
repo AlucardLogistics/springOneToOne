@@ -27,7 +27,7 @@ public class CreateDemo {
 		
 		try {			
 			
-			//start  a transaction
+			//start  a transactions
 			session.beginTransaction();
 			
 			//get the instructor by their primary key
