@@ -44,6 +44,9 @@ public class GetInstructorDetailDemo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			//handle leaks
+			session.close();
+			
 			factory.close();
 		}
 	}

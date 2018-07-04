@@ -22,22 +22,24 @@ public class CreateDemo {
 		Session session = factory.getCurrentSession();
 		
 		
-		try {			
+		try {		
 			
-			//start  a transactions
+			//create the objects
+			Instructor tempInstructor = 
+					new Instructor("bruce", "wayne", "bruce@gotham.bat");
+			
+			InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.gotham.com", "staying out late");
+			
+			//associate the objects
+			tempInstructor.setInstructorDetail(tempInstructorDetail);
+			
+			//start  a transaction
 			session.beginTransaction();
 			
-			//get the instructor by their primary key
-			int id = 2;
-			Instructor inst = session.get(Instructor.class, id);
-			System.out.println("foind the instructor: " + inst);
-			
-			//delete the instructor
-			if(inst != null) {
-				System.out.println("Deleting: " + inst);
-				//ALSO delete the associated "details" object (Cascade.ALL)
-				session.delete(inst);
-			}
+			//save the instructor
+			//this will ALSO save the details object(CascadeType.all)
+			System.out.println("Saving the instructor: " + tempInstructor);
+			session.save(tempInstructor);
 			
 			//commit transaction
 			session.getTransaction().commit();

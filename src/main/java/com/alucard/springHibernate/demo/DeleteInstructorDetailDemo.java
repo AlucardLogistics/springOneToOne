@@ -7,7 +7,7 @@ import org.hibernate.cfg.Configuration;
 import com.alucard.springHibernate.entity.Instructor;
 import com.alucard.springHibernate.entity.InstructorDetail;
 
-public class DeleteDemo {
+public class DeleteInstructorDetailDemo {
 
 	public static void main(String[] args) {
 		
@@ -24,21 +24,25 @@ public class DeleteDemo {
 		
 		try {
 			
-			//start  a transactions
+			//start  a transaction
 			session.beginTransaction();
 			
-			//get the instructor by their primary key
-			int id = 2;
-			Instructor inst = session.get(Instructor.class, id);
-			System.out.println("foind the instructor: " + inst);
+			int theId = 4;
 			
-			//delete the instructor
-			if(inst != null) {
-				System.out.println("Deleting: " + inst);
-				//ALSO delete the associated "details" object (Cascade.ALL)
-				session.delete(inst);
-			}
+			InstructorDetail tempInstDetail = session.get(InstructorDetail.class, theId);			
 			
+			//print the associated intructor
+			System.out.println("Associated instructor: " + tempInstDetail.getInstructor());
+			
+			//delete the instructor detail
+			System.out.println("Deleting tempInstDetail: " + tempInstDetail);
+			
+			//break the bi-directional link
+			tempInstDetail.getInstructor().setInstructorDetail(null);
+			
+			session.delete(tempInstDetail);
+			
+						
 			//commit transaction
 			session.getTransaction().commit();
 			
@@ -47,6 +51,9 @@ public class DeleteDemo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			//handle leaks
+			session.close();
+			
 			factory.close();
 		}
 	}
